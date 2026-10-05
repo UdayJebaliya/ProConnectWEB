@@ -21,5 +21,4 @@ export const SuccessMessages = {
   USER_CREATED: "User created. An activation email has been sent.",
   USER_UPDATED: "User updated successfully.",
   USER_DELETED: "User deleted successfully.",
-  USER_PASSWORD_SET: "Password set successfully.",
 } as const;

@@ -10,10 +10,9 @@ interface UsersTableProps {
   isSuperAdmin: boolean;
   onEdit: (user: User) => void;
   onDelete: (user: User) => void;
-  onSetPassword: (user: User) => void;
 }
 
-export function UsersTable({ users, isSuperAdmin, onEdit, onDelete, onSetPassword }: UsersTableProps) {
+export function UsersTable({ users, isSuperAdmin, onEdit, onDelete }: UsersTableProps) {
   return (
     <table className="min-w-full divide-y divide-gray-200">
       <thead className="bg-gray-50">
@@ -42,7 +41,6 @@ export function UsersTable({ users, isSuperAdmin, onEdit, onDelete, onSetPasswor
         {users.map((user) => {
           const items: DropdownMenuItem[] = [
             { label: "Edit", onClick: () => onEdit(user) },
-            { label: "Set password", onClick: () => onSetPassword(user) },
             { label: "Delete", onClick: () => onDelete(user), destructive: true },
           ];
 

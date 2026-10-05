@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { useAuth } from "@/context/AuthContext";
 import { UserTypeLabel } from "@/lib/constants/enums";
 import { AppRoutes } from "@/lib/constants/routes";
+import { DropdownMenu } from "@/components/common/DropdownMenu";
+import { ChangePasswordModal } from "@/components/auth/ChangePasswordModal";
 
 const navLinks = [
   { href: AppRoutes.organizations, label: "Organizations" },
@@ -15,6 +18,7 @@ const navLinks = [
 export function AppHeader() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
   if (!user) return null;
 
@@ -47,15 +51,16 @@ export function AppHeader() {
               {UserTypeLabel[user.userType]}
             </span>
           </span>
-          <button
-            type="button"
-            onClick={() => logout()}
-            className="rounded-md border border-gray-300 px-3 py-1.5 font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Log out
-          </button>
+          <DropdownMenu
+            items={[
+              { label: "Change password", onClick: () => setIsChangePasswordOpen(true) },
+              { label: "Log out", onClick: () => logout(), destructive: true },
+            ]}
+          />
         </div>
       </div>
+
+      <ChangePasswordModal open={isChangePasswordOpen} onClose={() => setIsChangePasswordOpen(false)} />
     </header>
   );
 }

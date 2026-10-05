@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { usersApi } from "@/lib/api/endpoints/users";
 import { getErrorMessage } from "@/lib/utils/errors";
 import type { PagedResult } from "@/lib/types/common";
-import type { CreateUserRequest, SetPasswordRequest, UpdateUserRequest, User } from "@/lib/types/user";
+import type { CreateUserRequest, UpdateUserRequest, User } from "@/lib/types/user";
 
 const PAGE_SIZE = 10;
 
@@ -58,10 +58,6 @@ export function useUsers(organizationId: number | undefined) {
     if (isLastItemOnPage) setPage(page - 1);
   }
 
-  async function setPassword(id: number, payload: SetPasswordRequest): Promise<void> {
-    await usersApi.setPassword(id, payload);
-  }
-
   return {
     users: result?.items ?? [],
     page,
@@ -73,6 +69,5 @@ export function useUsers(organizationId: number | undefined) {
     createUser,
     updateUser,
     deleteUser,
-    setPassword,
   };
 }

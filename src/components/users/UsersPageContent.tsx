@@ -14,7 +14,6 @@ import { Spinner } from "@/components/common/Spinner";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { UsersTable } from "@/components/users/UsersTable";
 import { UserFormModal, type UserFormValues } from "@/components/users/UserFormModal";
-import { SetPasswordModal } from "@/components/users/SetPasswordModal";
 import { OrganizationFilterSelect } from "@/components/users/OrganizationFilterSelect";
 import type { User } from "@/lib/types/user";
 
@@ -38,15 +37,12 @@ export function UsersPageContent() {
     createUser,
     updateUser,
     deleteUser,
-    setPassword,
   } = useUsers(organizationId);
 
   const [formUser, setFormUser] = useState<User | null | "new">(null);
   const [isSavingForm, setIsSavingForm] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<User | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [passwordUser, setPasswordUser] = useState<User | null>(null);
-  const [isSavingPassword, setIsSavingPassword] = useState(false);
 
   function handleOrganizationFilterChange(nextOrganizationId: number | undefined) {
     const params = new URLSearchParams(searchParams.toString());
@@ -90,20 +86,6 @@ export function UsersPageContent() {
     }
   }
 
-  async function handleSetPasswordSubmit(newPassword: string) {
-    if (!passwordUser) return;
-    setIsSavingPassword(true);
-    try {
-      await setPassword(passwordUser.id, { newPassword });
-      showSuccess(SuccessMessages.USER_PASSWORD_SET);
-      setPasswordUser(null);
-    } catch (err) {
-      showError(getErrorMessage(err));
-    } finally {
-      setIsSavingPassword(false);
-    }
-  }
-
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -137,7 +119,6 @@ export function UsersPageContent() {
                 isSuperAdmin={isSuperAdmin}
                 onEdit={setFormUser}
                 onDelete={setPendingDelete}
-                onSetPassword={setPasswordUser}
               />
             </div>
             <Pagination page={page} pageSize={pageSize} totalCount={totalCount} onPageChange={setPage} />
@@ -152,14 +133,6 @@ export function UsersPageContent() {
         isSubmitting={isSavingForm}
         onSubmit={handleFormSubmit}
         onClose={() => setFormUser(null)}
-      />
-
-      <SetPasswordModal
-        open={passwordUser !== null}
-        user={passwordUser}
-        isSubmitting={isSavingPassword}
-        onSubmit={handleSetPasswordSubmit}
-        onClose={() => setPasswordUser(null)}
       />
 
       <ConfirmDialog

@@ -43,11 +43,6 @@ export const usersApi = {
     return apiRequest<void>(`/api/users/${id}`, { method: "DELETE" });
   },
 
-  /** Admin-initiated reset: caller is an authenticated admin, no current password needed. */
-  setPassword(id: number, payload: SetPasswordRequest): Promise<void> {
-    return apiRequest<void>(`/api/users/${id}/set-password`, { method: "POST", body: payload });
-  },
-
   /**
    * Self-service activation: caller isn't logged in — the one-time token
    * from the emailed activation link stands in for a session access token.
